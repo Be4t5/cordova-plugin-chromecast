@@ -1,7 +1,7 @@
 package acidhax.cordova.chromecast;
 
 import android.graphics.Color;
-import androidx.core.content.ContextCompat;
+import android.support.v4.content.ContextCompat;
 
 import com.google.android.gms.cast.MediaInfo;
 import com.google.android.gms.cast.MediaStatus;
