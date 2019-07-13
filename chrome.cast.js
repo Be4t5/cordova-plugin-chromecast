@@ -810,7 +810,7 @@ chrome.cast.Session.prototype.loadMedia = function (loadRequest, successCallback
 			_currentMedia.media.tracks = [];
 
 			obj.media.tracks.forEach((track) => {
-				let newTrack = new chrome.cast.media.Track(track.trackId, track.type);
+				var newTrack = new chrome.cast.media.Track(track.trackId, track.type);
 				newTrack.customData = track.customData || null;
 				newTrack.language = track.language || null;
 				newTrack.name = track.name || null;
