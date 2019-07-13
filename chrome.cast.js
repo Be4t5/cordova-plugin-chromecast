@@ -809,7 +809,8 @@ chrome.cast.Session.prototype.loadMedia = function (loadRequest, successCallback
 
 			_currentMedia.media.tracks = [];
 
-			obj.media.tracks.forEach((track) => {
+			for(var i = 0; i < obj.media.tracks.length; i++){
+				var track = obj.media.tracks[i];
 				var newTrack = new chrome.cast.media.Track(track.trackId, track.type);
 				newTrack.customData = track.customData || null;
 				newTrack.language = track.language || null;
@@ -819,7 +820,7 @@ chrome.cast.Session.prototype.loadMedia = function (loadRequest, successCallback
 				newTrack.trackContentType = track.trackContentType || null;
 
 				_currentMedia.media.tracks.push(newTrack);
-			})
+			}
 
 			successCallback(_currentMedia);
 
