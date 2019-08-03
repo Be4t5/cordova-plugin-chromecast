@@ -719,7 +719,9 @@ public class ChromecastSession
 	@Override
 	public void onStatusUpdated() {
 		if (this.onMediaUpdatedListener != null) {
+		  	try {
 			this.onMediaUpdatedListener.onMediaUpdated(true, this.createMediaObject());
+		      }catch(Exception e){}
 		}
 	}
 
