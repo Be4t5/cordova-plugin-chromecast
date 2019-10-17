@@ -27,7 +27,7 @@ import com.google.android.gms.common.api.Status;
 import com.google.android.gms.common.images.WebImage;
 
 import android.os.Bundle;
-import android.support.v7.media.MediaRouter.RouteInfo;
+import androidx.mediarouter.media.MediaRouter.RouteInfo;
 
 /*
  * All of the Chromecast session specific functions should start here.
@@ -395,27 +395,29 @@ public class ChromecastSession
 	private ResultCallback<Cast.ApplicationConnectionResult> launchApplicationResultCallback = new ResultCallback<Cast.ApplicationConnectionResult>() {
 		@Override
 		public void onResult(ApplicationConnectionResult result) {
+      try{
+        ApplicationMetadata metadata = result.getApplicationMetadata();
+        ChromecastSession.this.sessionId = result.getSessionId();
+        ChromecastSession.this.displayName = metadata.getName();
+        ChromecastSession.this.appImages = metadata.getImages();
 
-			ApplicationMetadata metadata = result.getApplicationMetadata();
-			ChromecastSession.this.sessionId = result.getSessionId();
-			ChromecastSession.this.displayName = metadata.getName();
-			ChromecastSession.this.appImages = metadata.getImages();
+        Status status = result.getStatus();
 
-			Status status = result.getStatus();
+        if (status.isSuccess()) {
+          try {
+            ChromecastSession.this.launchCallback.onSuccess(ChromecastSession.this);
+            connectRemoteMediaPlayer();
+            ChromecastSession.this.isConnected = true;
+          } catch (IllegalStateException e) {
+            e.printStackTrace();
+          } catch (IOException e) {
+            e.printStackTrace();
+          }
+        } else {
+          ChromecastSession.this.isConnected = false;
+        }
+      }catch(Exception e){}
 
-			if (status.isSuccess()) {
-				try {
-					ChromecastSession.this.launchCallback.onSuccess(ChromecastSession.this);
-					connectRemoteMediaPlayer();
-					ChromecastSession.this.isConnected = true;
-				} catch (IllegalStateException e) {
-					e.printStackTrace();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			} else {
-				ChromecastSession.this.isConnected = false;
-			}
 		}
 	};
 
@@ -719,9 +721,9 @@ public class ChromecastSession
 	@Override
 	public void onStatusUpdated() {
 		if (this.onMediaUpdatedListener != null) {
-		  	try {
-			this.onMediaUpdatedListener.onMediaUpdated(true, this.createMediaObject());
-		      }catch(Exception e){}
+		  try {
+        this.onMediaUpdatedListener.onMediaUpdated(true, this.createMediaObject());
+      }catch(Exception e){}
 		}
 	}
 
